@@ -9,13 +9,13 @@
     <style>
         :root {--main:#1e3a2f;--sec:#2d6a4f;--light:#e8f4f0;--gold:#d4af37;}
         *{box-sizing:border-box;margin:0;padding:0;}
-        body{font-family:'Amiri',serif;background:#f5f7f8;color:#2c3e50;line-height:1.9;display:flex;min-height:100vh;flex-direction:column;}
-        .sidebar{width:300px;background:var(--main);color:white;padding:30px 20px;position:fixed;right:0;top:0;bottom:0;overflow-y:auto;box-shadow:-10px 0 25px rgba(0,0,0,0.2);z-index:10;transition:right 0.4s;}
+        body{font-family:'Amiri',serif;background:#f5f7f8;color:#2c3e50;line-height:1.9;display:flex;min-height:100vh;flex-direction:column;transition:all 0.4s;}
+        .sidebar{width:300px;background:var(--main);color:white;padding:30px 20px;position:fixed;right:0;top:0;bottom:0;overflow-y:auto;box-shadow:-10px 0 25px rgba(0,0,0,0.2);z-index:999;transition:right 0.4s;}
         .sidebar h3{font-size:2rem;text-align:center;margin-bottom:30px;color:var(--gold);border-bottom:3px solid var(--gold);padding-bottom:10px;}
         .sidebar ul{list-style:none;}
         .sidebar a{display:block;padding:18px 22px;background:rgba(255,255,255,0.1);border-radius:12px;margin:10px 0;color:white;font-size:1.4rem;text-decoration:none;transition:0.4s;border-right:6px solid transparent;}
         .sidebar a:hover,.sidebar a.active{background:var(--sec);border-right-color:var(--gold);transform:translateX(-10px);}
-        .main-content{flex:1;margin-right:300px;padding:40px;background:white;transition:margin-right 0.4s;}
+        .main-content{flex:1;margin-right:300px;padding:40px;background:white;transition:margin-right 0.4s;position:relative;}
         header{background:linear-gradient(135deg,var(--main),var(--sec));color:white;text-align:center;padding:70px 20px;}
         header h1{font-size:2.8rem;}
         .container{max-width:1150px;margin:0 auto;}
@@ -31,31 +31,45 @@
         .acc-body{padding:30px;background:white;border:2px solid var(--sec);border-top:none;border-radius:0 0 14px 14px;}
         .answer{background:var(--light);padding:25px;border-radius:14px;border-right:6px solid var(--sec);font-size:1.35rem;}
         .correct{color:var(--main);font-weight:bold;}
-        .menu-toggle{display:none;position:fixed;top:15px;right:15px;background:var(--main);color:white;padding:15px;border-radius:50%;font-size:1.8rem;cursor:pointer;z-index:1000;}
+        .menu-toggle{display:none;position:fixed;top:15px;right:15px;background:var(--main);color:white;width:50px;height:50px;border-radius:50%;font-size:1.5rem;cursor:pointer;z-index:1000;box-shadow:0 4px 15px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;}
         footer{text-align:center;padding:30px;background:var(--main);color:white;margin-top:auto;}
 
+        @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+        /* تحسينات الجوال - مثالية 100% */
         @media(max-width:992px){
             .sidebar{position:fixed;top:0;right:-300px;width:300px;height:100%;transition:right 0.4s;z-index:999;}
             .sidebar.open{right:0;}
-            .main-content{margin-right:0;margin-left:0;padding:20px;}
-            .menu-toggle{display:block;}
+            .main-content{margin-right:0;padding:20px;}
+            .menu-toggle{display:flex;}
             header{padding:50px 20px;}
             header h1{font-size:2.2rem;}
-            .tab-btn{font-size:1rem;padding:12px 20px;}
+
+            .tabs{flex-direction:column;padding:0 15px;gap:12px;align-items:stretch;}
+            .tab-btn{font-size:1.18rem !important;padding:18px 20px !important;border-radius:14px !important;margin:0;}
+
+            details summary{font-size:1.32rem;padding:18px;}
+            details summary::after{font-size:1.9rem;min-width:50px;min-height:50px;display:flex;align-items:center;justify-content:center;}
+            .acc-body{padding:24px;}
+            .answer{font-size:1.28rem;padding:22px;}
         }
-        @media(max-width:600px){
-            .tabs{gap:8px;}
-            .tab-btn{font-size:0.95rem;padding:10px 16px;}
-            details summary{font-size:1.25rem;padding:16px;}
-            .acc-body{padding:20px;}
-            .answer{font-size:1.2rem;padding:20px;}
+
+        @media(max-width:480px){
+            .tab-btn{font-size:1.1rem !important;padding:16px 18px !important;}
+            header h1{font-size:2rem;}
         }
-        @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+        body.sidebar-open{overflow:hidden;}
+        .sidebar.open ~ .main-content::before,
+        .sidebar.open ~ header::before,
+        .sidebar.open ~ footer::before{
+            content:"";position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:998;backdrop-filter:blur(5px);
+        }
     </style>
 </head>
 <body>
 
-<div class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+<div class="menu-toggle">
     <i class="fas fa-bars"></i>
 </div>
 
@@ -81,9 +95,7 @@
         <p>على عشرة مجالس + 60 سؤال مراجعة شاملة في كل مجلس</p>
     </header>
 
-    <div class="container" id="majlis-content">
-        <!-- المحتوى يظهر هنا -->
-    </div>
+    <div class="container" id="majlis-content"></div>
 </div>
 
 <footer>
@@ -91,7 +103,7 @@
 </footer>
 
 <script>
-// محتوى المجلس الأول - المقدمة
+// ====================== المجلس الأول - كامل 100% ======================
 const majlis1 = `
     <div class="tabs">
        <button class="tab-btn active" onclick="openTab(event,'tab1')">معنى العقيدة والاعتقاد</button>
@@ -239,7 +251,7 @@ const majlis1 = `
     </div>
 `;
 
-// محتوى المجلس الثاني
+// ====================== المجلس الثاني - كامل 100% ======================
 const majlis2 = `
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event,'tab2-1')">ترجمة الإمام البربهاري</button>
@@ -365,9 +377,10 @@ const majlis2 = `
     </div>
 `;
 
-// تحميل المجلس الأول افتراضياً
+// تحميل المجلس الأول عند فتح الصفحة
 document.getElementById('majlis-content').innerHTML = majlis1;
 
+// وظائف التنقل والتبويبات
 function showMajlis(num) {
     document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
     event.target.classList.add('active');
@@ -376,9 +389,9 @@ function showMajlis(num) {
     else {
         document.getElementById('majlis-content').innerHTML = `<h2 style="text-align:center;padding:120px 20px;font-size:2rem;color:var(--sec);">المجلس ${num} - قريباً إن شاء الله</h2>`;
     }
-    // إغلاق القائمة على الجوال بعد الاختيار
     if(window.innerWidth <= 992){
         document.querySelector('.sidebar').classList.remove('open');
+        document.body.classList.remove('sidebar-open');
     }
 }
 
@@ -387,11 +400,29 @@ function openTab(evt, tabName) {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
     document.getElementById(tabName).classList.add("active");
     evt.currentTarget.classList.add("active");
-    // التمرير لأعلى التبويب عند الضغط على الجوال
     if(window.innerWidth <= 992){
-        window.scrollTo({top: document.querySelector('header').offsetHeight, behavior: 'smooth'});
+        window.scrollTo({top: document.querySelector('header').offsetHeight + 70, behavior: 'smooth'});
     }
 }
+
+// فتح وإغلاق الـ Sidebar
+document.querySelector('.menu-toggle').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.body.classList.toggle('sidebar-open');
+});
+
+// إغلاق الـ Sidebar بالضغط خارجها
+document.addEventListener('click', function(e) {
+    if (window.innerWidth <= 992) {
+        const sidebar = document.querySelector('.sidebar');
+        const toggle = document.querySelector('.menu-toggle');
+        if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+            sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
+        }
+    }
+});
 </script>
 </body>
 </html>
