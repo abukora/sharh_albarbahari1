@@ -9,13 +9,13 @@
     <style>
         :root {--main:#1e3a2f;--sec:#2d6a4f;--light:#e8f4f0;--gold:#d4af37;}
         *{box-sizing:border-box;margin:0;padding:0;}
-        body{font-family:'Amiri',serif;background:#f5f7f8;color:#2c3e50;line-height:1.9;display:flex;min-height:100vh;}
-        .sidebar{width:300px;background:var(--main);color:white;padding:30px 20px;position:fixed;right:0;top:0;bottom:0;overflow-y:auto;box-shadow:-10px 0 25px rgba(0,0,0,0.2);z-index:10;}
+        body{font-family:'Amiri',serif;background:#f5f7f8;color:#2c3e50;line-height:1.9;display:flex;min-height:100vh;flex-direction:column;}
+        .sidebar{width:300px;background:var(--main);color:white;padding:30px 20px;position:fixed;right:0;top:0;bottom:0;overflow-y:auto;box-shadow:-10px 0 25px rgba(0,0,0,0.2);z-index:10;transition:right 0.4s;}
         .sidebar h3{font-size:2rem;text-align:center;margin-bottom:30px;color:var(--gold);border-bottom:3px solid var(--gold);padding-bottom:10px;}
         .sidebar ul{list-style:none;}
         .sidebar a{display:block;padding:18px 22px;background:rgba(255,255,255,0.1);border-radius:12px;margin:10px 0;color:white;font-size:1.4rem;text-decoration:none;transition:0.4s;border-right:6px solid transparent;}
         .sidebar a:hover,.sidebar a.active{background:var(--sec);border-right-color:var(--gold);transform:translateX(-10px);}
-        .main-content{flex:1;margin-right:300px;padding:40px;background:white;}
+        .main-content{flex:1;margin-right:300px;padding:40px;background:white;transition:margin-right 0.4s;}
         header{background:linear-gradient(135deg,var(--main),var(--sec));color:white;text-align:center;padding:70px 20px;}
         header h1{font-size:2.8rem;}
         .container{max-width:1150px;margin:0 auto;}
@@ -31,11 +31,24 @@
         .acc-body{padding:30px;background:white;border:2px solid var(--sec);border-top:none;border-radius:0 0 14px 14px;}
         .answer{background:var(--light);padding:25px;border-radius:14px;border-right:6px solid var(--sec);font-size:1.35rem;}
         .correct{color:var(--main);font-weight:bold;}
+        .menu-toggle{display:none;position:fixed;top:15px;right:15px;background:var(--main);color:white;padding:15px;border-radius:50%;font-size:1.8rem;cursor:pointer;z-index:1000;}
+        footer{text-align:center;padding:30px;background:var(--main);color:white;margin-top:auto;}
+
         @media(max-width:992px){
-            .sidebar{position:fixed;top:0;right:-300px;width:300px;height:100%;transition:0.4s;z-index:999;}
+            .sidebar{position:fixed;top:0;right:-300px;width:300px;height:100%;transition:right 0.4s;z-index:999;}
             .sidebar.open{right:0;}
-            .main-content{margin-right:0;}
-            .menu-toggle{display:block;position:fixed;top:15px;right:15px;background:var(--main);color:white;padding:15px;border-radius:50%;font-size:1.8rem;cursor:pointer;z-index:1000;}
+            .main-content{margin-right:0;margin-left:0;padding:20px;}
+            .menu-toggle{display:block;}
+            header{padding:50px 20px;}
+            header h1{font-size:2.2rem;}
+            .tab-btn{font-size:1rem;padding:12px 20px;}
+        }
+        @media(max-width:600px){
+            .tabs{gap:8px;}
+            .tab-btn{font-size:0.95rem;padding:10px 16px;}
+            details summary{font-size:1.25rem;padding:16px;}
+            .acc-body{padding:20px;}
+            .answer{font-size:1.2rem;padding:20px;}
         }
         @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
     </style>
@@ -73,8 +86,12 @@
     </div>
 </div>
 
+<footer>
+    <p>نسأل الله الإخلاص والقبول والثبات على عقيدة السلف الصالح</p>
+</footer>
+
 <script>
-// محتوى المجلس الأول - المقدمة (كامل بدون حذف)
+// محتوى المجلس الأول - المقدمة
 const majlis1 = `
     <div class="tabs">
        <button class="tab-btn active" onclick="openTab(event,'tab1')">معنى العقيدة والاعتقاد</button>
@@ -85,8 +102,6 @@ const majlis1 = `
         <button class="tab-btn" onclick="openTab(event,'tab6')">60 سؤال مراجعة شاملة</button>
     </div>
 
-
-    <!-- تبويب 1 -->
     <div id="tab1" class="tab-content active">
         <h2>معنى العقيدة والاعتقاد</h2>
         <details><summary>أصل الكلمة لغة</summary><div class="acc-body">من «عَقَدَ» بمعنى الشد والصلابة → عَقَد العسل إذا اشتدّ، عَقَد النوى إذا صلب</div></details>
@@ -94,7 +109,6 @@ const majlis1 = `
         <details><summary>شدة تمسك أهل الباطل بعقائدهم</summary><div class="acc-body">مشاهد حتى عند أصحاب العقائد الفاسدة → فكيف بأهل العقيدة الصحيحة؟</div></details>
     </div>
 
-    <!-- تبويب 2 -->
     <div id="tab2" class="tab-content">
         <h2>نشأة التصنيف في كتب الاعتقاد</h2>
         <details><summary>متى بدأ التصنيف في السنة عموماً؟</summary><div class="acc-body">في القرن الثاني الهجري</div></details>
@@ -110,7 +124,6 @@ const majlis1 = `
         </div></details>
     </div>
 
-    <!-- تبويب 3 -->
     <div id="tab3" class="tab-content">
         <h2>أبرز الكتب العقدية في القرون الأولى</h2>
         <details><summary>الإمام الشافعي (ت 204هـ)</summary><div class="acc-body">اعتقاد الشافعي → ركز على إثبات الأسماء والصفات فقط</div></details>
@@ -126,7 +139,6 @@ const majlis1 = `
         <details><summary>الإسماعيلي (ت 371هـ) والصابوني (ت 449هـ)</summary><div class="acc-body">اعتقاد الإسماعيلي + عقيدة السلف وأصحاب الحديث</div></details>
     </div>
 
-    <!-- تبويب 4 -->
     <div id="tab4" class="tab-content">
         <h2>أنواع المصنفات العقدية عند أهل السنة</h2>
         <details><summary>كتب موضوعية</summary><div class="acc-body">مثل: كتاب الإيمان، النبوات، الإيمان لابن تيمية (ضخم بحثي)</div></details>
@@ -135,7 +147,6 @@ const majlis1 = `
         <details><summary>كتب موسوعية</summary><div class="acc-body">مجموع الفتاوى، الحجة في بيان المحجة (الأصبهاني)</div></details>
     </div>
 
-    <!-- تبويب 5 -->
     <div id="tab5" class="tab-content">
         <h2>لماذا نركز على عقيدة السلف دون منهج المتكلمين؟</h2>
         <details><summary>أبرز عيوب منهج المتكلمين</summary><div class="acc-body">
@@ -161,12 +172,11 @@ const majlis1 = `
         </div></details>
     </div>
 
-    <!-- تبويب 6 - 60 سؤال -->
     <div id="tab6" class="tab-content">
         <h2>الأسئلة والمراجعة الشاملة (60 سؤالاً)</h2>
         <p style="text-align:center;font-size:1.5rem;color:var(--sec);margin:35px 0;">اضغط على السؤال لتظهر الإجابة</p>
 
-     <details><summary>1. ما أصل كلمة "العقيدة" لغة؟</summary><div class="acc-body"><div class="answer"><span class="correct">من "عقد": الشد والصلابة (عقد العسل، عقد النوى)</span></div></div></details>
+        <details><summary>1. ما أصل كلمة "العقيدة" لغة؟</summary><div class="acc-body"><div class="answer"><span class="correct">من "عقد": الشد والصلابة (عقد العسل، عقد النوى)</span></div></div></details>
         <details><summary>2. لماذا تكون عقيدة السلف أشد تمسكاً؟</summary><div class="acc-body"><div class="answer"><span class="correct">لأنها حق، وأهل الحق أولى بالحرص</span></div></div></details>
         <details><summary>3. متى بدأ التصنيف في مسائل الاعتقاد؟</summary><div class="acc-body"><div class="answer"><span class="correct">القرن الثالث الهجري</span></div></div></details>
         <details><summary>4. ما طبيعة التصنيف الأول في السنة؟</summary><div class="acc-body"><div class="answer"><span class="correct">تصنيف مطلق (مسانيد على الرجال)</span></div></div></details>
@@ -229,7 +239,7 @@ const majlis1 = `
     </div>
 `;
 
-// محتوى المجلس الثاني - الشرح الكامل
+// محتوى المجلس الثاني
 const majlis2 = `
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event,'tab2-1')">ترجمة الإمام البربهاري</button>
@@ -292,21 +302,7 @@ const majlis2 = `
     <div id="tab2-7" class="tab-content">
         <h2>الأسئلة والمراجعة الشاملة (60 سؤالاً)</h2>
         <p style="text-align:center;font-size:1.5rem;color:var(--sec);margin:35px 0;">اضغط على السؤال لتظهر الإجابة</p>
-      <details><summary>1. متى وُلد الإمام البربهاري ومتى توفي؟</summary><div class="acc-body"><div class="answer"><span class="correct">253 - 329 هـ</span></div></div></details>
-        <details><summary>2. ما معنى «البربهاري» في نسبته؟</summary><div class="acc-body"><div class="answer"><span class="correct">نسبة إلى دواء يجلب من الهند</span></div></div></details>
-        <details><summary>3. من أشهر تلاميذ البربهاري؟</summary><div class="acc-body"><div class="answer"><span class="correct">ابن بطة العكبري صاحب الإبانة</span></div></div></details>
-        <details><summary>4. ماذا قال ابن بطة في البربهاري؟</summary><div class="acc-body"><div class="answer"><span class="correct">إذا رأيت البغدادي يحب أبا محمد البربهاري فاعلم أنه صاحب سنة</span></div></div></details>
-        <details><summary>5. لماذا استتر البربهاري حتى مات؟</summary><div class="acc-body"><div class="answer"><span class="correct">لشدة تحريه للسنة ومواجهته لأهل البدع فأوشي به إلى السلطان</span></div></div></details>
-        <details><summary>6. ما معنى قوله «الإسلام هو السنة والسنة هي الإسلام»؟</summary><div class="acc-body"><div class="answer"><span class="correct">لا ينفك أحدهما عن الآخر</span></div></div></details>
-        <details><summary>7. ما المقصود بالجماعة عند السلف؟</summary><div class="acc-body"><div class="answer"><span class="correct">من تمسك بالحق ولو كان واحداً</span></div></div></details>
-        <details><summary>8. من هو السواد الأعظم؟</summary><div class="acc-body"><div class="answer"><span class="correct">الحق وأهله ولو قلّوا</span></div></div></details>
-        <details><summary>9. اذكر مثالاً تاريخياً للجماعة وهي شخص واحد؟</summary><div class="acc-body"><div class="answer"><span class="correct">أبو بكر رضي الله عنه يوم قتال المرتدين</span></div></div></details>
-        <details><summary>10. قول عمر: «لا عذر لأحد في ضلالة...» ما تمامه؟</summary><div class="acc-body"><div class="answer"><span class="correct">ركبها حسبها هدى، ولا في هدى تركه حسبه ضلالة</span></div></div></details>
-        <details><summary>11. هل يُقبل الدين بعقول الرجال؟</summary><div class="acc-body"><div class="answer"><span class="correct">لا، بل يُحكم على الرجال بالدين لا العكس</span></div></div></details>
-        <details><summary>12. من خالف الصحابة في شيء من أمر الدين ماذا يكون؟</summary><div class="acc-body"><div class="answer"><span class="correct">كافر (على حسب نوع المخالفة)</span></div></div></details>
-        <details><summary>13. الناس لم يبتدعوا بدعة حتى...؟</summary><div class="acc-body"><div class="answer"><span class="correct">تركوا من السنة مثلها</span></div></div></details>
-        <details><summary>14. هل تعود السنة بعد تركها لأجل البدعة؟</summary><div class="acc-body"><div class="answer"><span class="correct">لا، لا تعود أبداً</span></div></div></details>
-       <details><summary>1. ما اسم الإمام البربهاري الكامل؟</summary><div class="acc-body"><div class="answer"><span class="correct">الحسن بن علي بن خلف البربهاري</span></div></div></details>
+        <details><summary>1. ما اسم الإمام البربهاري الكامل؟</summary><div class="acc-body"><div class="answer"><span class="correct">الحسن بن علي بن خلف البربهاري</span></div></div></details>
         <details><summary>2. متى وُلد ومتى توفي رحمه الله؟</summary><div class="acc-body"><div class="answer"><span class="correct">253 - 329 هـ</span></div></div></details>
         <details><summary>3. ما معنى "البربهاري" في نسبته؟</summary><div class="acc-body"><div class="answer"><span class="correct">نسبة إلى بيع دواء يُجلب من الهند</span></div></div></details>
         <details><summary>4. من أشهر تلاميذ البربهاري؟</summary><div class="acc-body"><div class="answer"><span class="correct">ابن بطة العكبري صاحب "الإبانة الكبرى"</span></div></div></details>
@@ -369,16 +365,20 @@ const majlis2 = `
     </div>
 `;
 
-// عرض المجلس الأول عند التحميل
+// تحميل المجلس الأول افتراضياً
 document.getElementById('majlis-content').innerHTML = majlis1;
 
 function showMajlis(num) {
     document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
     event.target.classList.add('active');
     if (num == 1) document.getElementById('majlis-content').innerHTML = majlis1;
-    if (num == 2) document.getElementById('majlis-content').innerHTML = majlis2;
-    if (num > 2) {
-        document.getElementById('majlis-content').innerHTML = `<h2 style="text-align:center;padding:100px;font-size:2rem;color:var(--sec);">المجلس ${num} - قريباً إن شاء الله</h2>`;
+    else if (num == 2) document.getElementById('majlis-content').innerHTML = majlis2;
+    else {
+        document.getElementById('majlis-content').innerHTML = `<h2 style="text-align:center;padding:120px 20px;font-size:2rem;color:var(--sec);">المجلس ${num} - قريباً إن شاء الله</h2>`;
+    }
+    // إغلاق القائمة على الجوال بعد الاختيار
+    if(window.innerWidth <= 992){
+        document.querySelector('.sidebar').classList.remove('open');
     }
 }
 
@@ -387,6 +387,10 @@ function openTab(evt, tabName) {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
     document.getElementById(tabName).classList.add("active");
     evt.currentTarget.classList.add("active");
+    // التمرير لأعلى التبويب عند الضغط على الجوال
+    if(window.innerWidth <= 992){
+        window.scrollTo({top: document.querySelector('header').offsetHeight, behavior: 'smooth'});
+    }
 }
 </script>
 </body>
